@@ -9,6 +9,7 @@
         integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css"
         integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
     <link rel="stylesheet" href="app.css">
 </head>
 
@@ -28,7 +29,7 @@
         <br>
 
         <h1>My Shop</h1>
-        <transition name="fade">
+        <transition name="custom" enter-active-class="animate__animated animate__fadeInDown" leave-active-class="animate__animated animate__slideOutRight">
             <div v-if="style.sliderStatus">
                 <div class="align-items-center" :class="sliderState">
                     <label for="" :class="style.label">Max</label>
@@ -38,19 +39,22 @@
                 </div>
             </div>
         </transition>
-        <div class="row d-flex mb-3 align-items-center" v-for="item in products" v-if="item.price <= Number(maximum)">
-            <div class="col-1 m-auto">
-                <button class="btn btn-info" v-on:click="addItem(item)">+</button>
+
+        <transition-group name="fade" tag="div" enter-active-class="animate__animated animate__fadeInRight" leave-active-class="animate__animated animate__fadeOutRight">
+            <div class="row d-flex mb-3 align-items-center" v-for="(item, index) in products" :key="item.id" v-if="item.price <= Number(maximum)">
+                <div class="col-1 m-auto">
+                    <button class="btn btn-info" v-on:click="addItem(item)">+</button>
+                </div>
+                <div class="col-sm-4">
+                    <img class="img-fluid d-block" v-bind:src="item.image" alt="">
+                </div>
+                <div class="col">
+                    <h3 class="text-info">{{ item.name }}</h3>
+                    <p class="mb-0">{{ item.description }}</p>
+                    <div class="h5 float-right">Rp{{ item.price }}</div>
+                </div>
             </div>
-            <div class="col-sm-4">
-                <img class="img-fluid d-block" v-bind:src="item.image" alt="">
-            </div>
-            <div class="col">
-                <h3 class="text-info">{{ item.name }}</h3>
-                <p class="mb-0">{{ item.description }}</p>
-                <div class="h5 float-right">Rp{{ item.price }}</div>
-            </div>
-        </div>
+        </transition-group>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
         integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
