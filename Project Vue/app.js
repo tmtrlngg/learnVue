@@ -3,7 +3,12 @@ var app = new Vue({
     data: {
         maximum: 50,
         products: null,
-        cart: []
+        cart: [],
+        style: {
+            label: ['font-weight-bold', 'mr-2'],
+            inputWidth: 60,
+            sliderStatus: false
+        }
     },
     mounted: function() {
         fetch('https://hplussport.com/api/products/order/price')
@@ -11,6 +16,11 @@ var app = new Vue({
         .then(data => {
             this.products = data;
         })
+    },
+    computed: {
+        sliderState: function() {
+            return this.style.sliderStatus ? 'd-flex' : 'd-none';
+        }
     },
     methods: {
         addItem: function(product) {
