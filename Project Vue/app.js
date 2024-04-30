@@ -25,11 +25,40 @@ var app = new Vue({
     computed: {
         sliderState: function() {
             return this.style.sliderStatus ? 'd-flex' : 'd-none';
+        },
+        cartTotal: function() {
+            var total = 0
+            this.cart.forEach(item => {
+                var totalPerItem = Number(item.qty) * Number(item.product.price)
+                total += totalPerItem
+            });
+            return total
+        },
+        cartQty: function() {
+            var qty = 0
+            this.cart.forEach(item => {
+                qty += Number(item.qty) 
+            });
+            return qty
         }
     },
     methods: {
         addItem: function(product) {
-            this.cart.push(product)
+            var productIndex;
+            var productExist = this.cart.filter(function (item, index) {
+                if (item.product.id == Number(product.id)) {
+                    productIndex= index
+                    return true
+                } else {
+                    return false
+                }
+            });
+
+            if (productExist.length) {
+                this.cart[productIndex].qty++
+            } else {
+                this.cart.push({product: product, qty: 1});
+            }
         },
         before: function(el) {
             el.className = 'd-none'
