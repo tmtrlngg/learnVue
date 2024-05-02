@@ -1,13 +1,64 @@
 Vue.component('price', {
     data: function() {
-        return {
-            prefix: 'Rp',
-            precision: 2
+        return {}
+    },
+    props:{
+        value: Number,
+        prefix: {
+            type: String,
+            default: 'Rp'
+        },
+        precision: {
+            type: Number,
+            default: 2
         }
     },
-    props:['value'],
     template: '<span>{{ this.prefix + Number.parseFloat(this.value).toFixed(this.precision) }}</span>'
-})
+});
+
+Vue.component('product-list', {
+    props: ['products', 'maximum'],
+    methods: {
+        before: function(el) {
+            el.className = 'd-none'
+        },
+        enter: function(el) {
+            var delay = el.dataset.index * 100
+            setTimeout(function () {
+                el.className = "row d-flex mb-3 align-items-center animate__animated animate__fadeInRight"
+            }, delay);
+        },
+        leave: function(el) {
+            var delay = el.dataset.index * 100
+            setTimeout(function () {
+                el.className = "row d-flex mb-3 align-items-center animate__animated animate__fadeOutRight"
+            }, delay);
+        }
+    },
+    template: `
+    <transition-group name="fade" tag="div" @beforeEnter="before" @enter="enter" @leave="leave">
+    <div class="row d-none mb-3 align-items-center" v-for="(item, index) in products" :key="item.id"
+        v-if="item.price <= Number(maximum)" :data-index="index">
+        <div class="col-1 m-auto">
+            <button class="btn btn-info" v-on:click="addItem(item)">+</button>
+        </div>
+        <div class="col-sm-4">
+            <img class="img-fluid d-block" v-bind:src="item.image" alt="">
+        </div>
+        <div class="col">
+            <h3 class="text-info">{{ item.name }}</h3>
+            <p class="mb-0">{{ item.description }}</p>
+            <div class="h5 float-right">
+                <price 
+                :value="Number(item.price)"
+                :precision="3"
+                ></price>
+            </div>
+        </div>
+    </div>
+</transition-group>   
+    `
+});
 
 var app = new Vue({
     el: "#app",
@@ -78,20 +129,5 @@ var app = new Vue({
                 this.cart.splice(key, 1);
             }
         },
-        before: function(el) {
-            el.className = 'd-none'
-        },
-        enter: function(el) {
-            var delay = el.dataset.index * 100
-            setTimeout(function () {
-                el.className = "row d-flex mb-3 align-items-center animate__animated animate__fadeInRight"
-            }, delay);
-        },
-        leave: function(el) {
-            var delay = el.dataset.index * 100
-            setTimeout(function () {
-                el.className = "row d-flex mb-3 align-items-center animate__animated animate__fadeOutRight"
-            }, delay);
-        }
     }
-})
+});
