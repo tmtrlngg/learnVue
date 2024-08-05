@@ -1,5 +1,5 @@
 #
-config/db.config.js
+config/password.js
 
 # Logs
 logs
