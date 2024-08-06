@@ -24,3 +24,31 @@ exports.findOrder = async (req, res) => {
         })
     }
 }
+
+exports.addToCart = async (req, res) => {
+    try {
+        const id = Number(req.params.id)
+        const productCode = String(req.body.product)
+    
+        const result = await Order.updateOne({user_id: id}, {$addToSet: {cart_items: productCode}})
+        res.send(result)
+    } catch (error) {
+        res.status(409).send({
+            message: error.message
+        })
+    }
+}
+
+exports.removeFromCart = async (req, res) => {
+    try {
+        const id = Number(req.params.id)
+        const productCode = String(req.params.product)
+    
+        const result = await Order.updateOne({user_id: id}, {$pull: {cart_items: productCode}})
+        res.send(result)
+    } catch (error) {
+        res.status(409).send({
+            message: error.message
+        })
+    }
+}
