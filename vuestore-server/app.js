@@ -1,8 +1,15 @@
 const express = require('express');
 const app = express();
-const path = require('path')
+const path = require('path');
+const cors = require('cors')
 const PORT = process.env.PORT || 8000
 
+let corsOptions = {
+    origin: "http://localhost:8080"
+}
+
+// enable cors
+app.use(cors(corsOptions))
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))
 
@@ -23,13 +30,6 @@ app.get('/', (req, res) => {
         message: "Hello"
     })
 })
-
-// Solusi error Control-Origin
-app.use(function(req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    next();
-  });
 
 app.use('/api/products', require('./app/routes/product.route'));
 app.use('/api/orders', require('./app/routes/order.route'));
