@@ -25,11 +25,11 @@ app.get('/', (req, res) => {
 })
 
 // Solusi error Control-Origin
-// app.use(function(req, res, next) {
-//     res.header("Access-Control-Allow-Origin", "*");
-//     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-//     next();
-//   });
+app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+  });
 
 app.use('/api/products', require('./app/routes/product.route'));
 app.use('/api/orders', require('./app/routes/order.route'));
